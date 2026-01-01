@@ -2,6 +2,7 @@ from textnode import TextNode
 from generate_page import *
 import os
 import shutil
+import sys
 
 def transfere_files(source_directory: str, destination_directory: str) -> None:
     # التأكد أن المجلدات موجودة
@@ -31,18 +32,22 @@ def transfere_files(source_directory: str, destination_directory: str) -> None:
 
 
 def main():
+    if len(sys.argv) >= 2:
+        basepath = sys.argv[1]
+    else:
+        basepath = os.getcwd()
     txt_node = TextNode("This is some anchor text", "link", "https://www.boot.dev")
     print(txt_node)  # print() يستدعي __repr__ تلقائيًا
     source = r"C:\Users\AbuHamzeh\Static-Site-Generator\static"
-    destination = r"C:\Users\AbuHamzeh\Static-Site-Generator\public"
+    destination = r"C:\Users\AbuHamzeh\Static-Site-Generator\docs"
     transfere_files(
         source,
         destination
     )
     generate_pages_recursive(
-        r"C:\Users\AbuHamzeh\Static-Site-Generator\content",
+        basepath,
         r"C:\Users\AbuHamzeh\Static-Site-Generator\template.html",
-        r"C:\Users\AbuHamzeh\Static-Site-Generator\public"  
+        r"C:\Users\AbuHamzeh\Static-Site-Generator\docs"  
     )
 
 main()
