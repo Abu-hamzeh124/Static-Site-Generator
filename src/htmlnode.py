@@ -1,3 +1,4 @@
+
 class HTMLNode():
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
@@ -31,6 +32,7 @@ class LeafNode(HTMLNode):
             else:
                  result += f"<{self.tag}>{self.value}</{self.tag}>" 
             return result
+
 class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)

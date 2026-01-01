@@ -1,31 +1,27 @@
 import unittest
-
-from htmlnode import LeafNode, ParentNode
+from textnode import *
+from text_to_html import text_node_to_html_node
+from split_nodes import split_nodes_delimiter
 
 
 class TestTextNode(unittest.TestCase):
-    def test_to_html_with_children(self):
-        child_node = LeafNode("span", "child")
-        parent_node = ParentNode("div", [child_node])
-        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+    def test_text(self):
+       node = TextNode("This is a `code node`", TextType.TEXT)
+       html_node = split_nodes_delimiter([node], '`', TextType.CODE)
+       self.assertEqual(html_node, [
+           TextNode("This is a ", TextType.TEXT, None),
+           TextNode("code node", TextType.CODE, None)
+       ])
+    def test_multiple_bold(self):
+        node = TextNode("**one** and **two**", TextType.TEXT)
+        result = split_nodes_delimiter([node], "**", TextType.BOLD)
 
-    def test_to_html_with_grandchildren(self):
-        grandchild_node = LeafNode("b", "grandchild")
-        child_node = ParentNode("span", [grandchild_node])
-        parent_node = ParentNode("div", [child_node])
-        self.assertEqual(
-            parent_node.to_html(),
-            "<div><span><b>grandchild</b></span></div>",
-        )
-    def test_to_html(self):
-        node = LeafNode("h1", "Frontend is not that impressing anymore!")
-        node2 = LeafNode("h2", "Frontend in 2025 is like typing a link in a browser!")
-        Parent_node = ParentNode("head", [node, node2])
-        self.assertEqual(
-            Parent_node.to_html(),
-            "<head><h1>Frontend is not that impressing anymore!</h1><h2>Frontend in 2025 is like typing a link in a browser!</h2></head>",
-        )    
+        self.assertEqual(result, [
+        TextNode("one", TextType.BOLD, None),
+        TextNode(" and ", TextType.TEXT, None),
+        TextNode("two", TextType.BOLD, None),
+        ])
 
-
+    
 if __name__ == "__main__":
     unittest.main()
